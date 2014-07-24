@@ -32,63 +32,63 @@ import org.apache.commons.logging.LogFactory;
  * A class that will exhaust a provided {@link InputStream} but dumping the
  * contents to a specified stream..
  * 
- * @author Cristian Sulea ( http://cristian.sulea.net )
- * @version 1.5 November 11, 2013
+ * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
+ * @version 1.6, July 24, 2014
  */
 public class InputStreamExhausterWithDumpStream implements Runnable {
 
-	private static final Log LOGGER = LogFactory.getLog(InputStreamExhausterWithDumpStream.class);
+  private static final Log LOGGER = LogFactory.getLog(InputStreamExhausterWithDumpStream.class);
 
-	private final InputStream processInputStream;
-	private final OutputStream dumpOutputStream;
-	private final boolean closeDumpOutputStream;
+  private final InputStream processInputStream;
+  private final OutputStream dumpOutputStream;
+  private final boolean closeDumpOutputStream;
 
-	public InputStreamExhausterWithDumpStream(InputStream processInputStream, OutputStream dumpOutputStream, boolean closeDumpOutputStream) {
-		this.processInputStream = processInputStream;
-		this.dumpOutputStream = dumpOutputStream;
-		this.closeDumpOutputStream = closeDumpOutputStream;
-	}
+  public InputStreamExhausterWithDumpStream(InputStream processInputStream, OutputStream dumpOutputStream, boolean closeDumpOutputStream) {
+    this.processInputStream = processInputStream;
+    this.dumpOutputStream = dumpOutputStream;
+    this.closeDumpOutputStream = closeDumpOutputStream;
+  }
 
-	public void exhaust() {
+  public void exhaust() {
 
-		BufferedReader processInputStreamReader = null;
-		BufferedWriter dumpOutputStreamWriter = null;
+    BufferedReader processInputStreamReader = null;
+    BufferedWriter dumpOutputStreamWriter = null;
 
-		try {
+    try {
 
-			processInputStreamReader = new BufferedReader(new InputStreamReader(processInputStream));
-			dumpOutputStreamWriter = new BufferedWriter(new OutputStreamWriter(dumpOutputStream));
+      processInputStreamReader = new BufferedReader(new InputStreamReader(processInputStream));
+      dumpOutputStreamWriter = new BufferedWriter(new OutputStreamWriter(dumpOutputStream));
 
-			String line = null;
-			while ((line = processInputStreamReader.readLine()) != null) {
+      String line = null;
+      while ((line = processInputStreamReader.readLine()) != null) {
 
-				dumpOutputStreamWriter.write(line);
-				dumpOutputStreamWriter.newLine();
+        dumpOutputStreamWriter.write(line);
+        dumpOutputStreamWriter.newLine();
 
-				dumpOutputStreamWriter.flush();
-			}
-		}
+        dumpOutputStreamWriter.flush();
+      }
+    }
 
-		catch (IOException e) {
-			LOGGER.error("error exhausting the stream", e);
-		}
+    catch (IOException e) {
+      LOGGER.error("error exhausting the stream", e);
+    }
 
-		finally {
-			if (closeDumpOutputStream) {
-				if (dumpOutputStreamWriter != null) {
-					try {
-						dumpOutputStreamWriter.close();
-					} catch (IOException e) {
-						LOGGER.error("error closing the dump stream", e);
-					}
-				}
-			}
-		}
-	}
+    finally {
+      if (closeDumpOutputStream) {
+        if (dumpOutputStreamWriter != null) {
+          try {
+            dumpOutputStreamWriter.close();
+          } catch (IOException e) {
+            LOGGER.error("error closing the dump stream", e);
+          }
+        }
+      }
+    }
+  }
 
-	@Override
-	public void run() {
-		exhaust();
-	}
+  @Override
+  public void run() {
+    exhaust();
+  }
 
 }

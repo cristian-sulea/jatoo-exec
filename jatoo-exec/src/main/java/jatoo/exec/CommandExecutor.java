@@ -29,115 +29,115 @@ import java.util.List;
  * 
  * TODO: WARNING: not tested on Linux
  * 
- * @author Cristian Sulea ( http://cristian.sulea.net )
- * @version 1.4 November 8, 2013
+ * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
+ * @version 1.5, July 24, 2014
  */
 public class CommandExecutor {
 
-	private final List<String> commandPrefix;
+  private final List<String> commandPrefix;
 
-	public CommandExecutor() {
+  public CommandExecutor() {
 
-		String osName = System.getProperty("os.name");
+    String osName = System.getProperty("os.name");
 
-		//
-		// Linux systems (WARNING: not tested)
+    //
+    // Linux systems (WARNING: not tested)
 
-		if (osName.equals("Linux")) {
-			commandPrefix = new ArrayList<String>(0);
-		}
+    if (osName.equals("Linux")) {
+      commandPrefix = new ArrayList<String>(0);
+    }
 
-		//
-		// old Windows systems
+    //
+    // old Windows systems
 
-		else if (osName.equals("Windows 95") || osName.equals("Windows 98") || osName.equalsIgnoreCase("Windows ME")) {
-			commandPrefix = Arrays.asList("command.com", "/C");
-		}
+    else if (osName.equals("Windows 95") || osName.equals("Windows 98") || osName.equalsIgnoreCase("Windows ME")) {
+      commandPrefix = Arrays.asList("command.com", "/C");
+    }
 
-		//
-		// modern (others) Windows systems
+    //
+    // modern (others) Windows systems
 
-		else {
-			commandPrefix = Arrays.asList("cmd.exe", "/C");
-		}
-	}
+    else {
+      commandPrefix = Arrays.asList("cmd.exe", "/C");
+    }
+  }
 
-	/**
-	 * Handy method for {@link #exec(String, File, OutputStream, boolean)} running
-	 * in working folder of JVM with no dump output stream.
-	 */
-	public int exec(String command) throws IOException, InterruptedException {
-		return exec(command, null, null, false);
-	}
+  /**
+   * Handy method for {@link #exec(String, File, OutputStream, boolean)} running
+   * in working folder of JVM with no dump output stream.
+   */
+  public int exec(String command) throws IOException, InterruptedException {
+    return exec(command, null, null, false);
+  }
 
-	/**
-	 * Handy method for {@link #exec(String, File, OutputStream, boolean)} with no
-	 * dump output stream.
-	 */
-	public int exec(String command, File folder) throws IOException, InterruptedException {
-		return exec(command, null, null, false);
-	}
+  /**
+   * Handy method for {@link #exec(String, File, OutputStream, boolean)} with no
+   * dump output stream.
+   */
+  public int exec(String command, File folder) throws IOException, InterruptedException {
+    return exec(command, null, null, false);
+  }
 
-	/**
-	 * Handy method for {@link #exec(String, File, OutputStream, boolean)} running
-	 * in working folder of JVM with specified dump output stream (but no
-	 * closing).
-	 */
-	public int exec(String command, OutputStream dumpOutputStream) throws IOException, InterruptedException {
-		return exec(command, null, dumpOutputStream, false);
-	}
+  /**
+   * Handy method for {@link #exec(String, File, OutputStream, boolean)} running
+   * in working folder of JVM with specified dump output stream (but no
+   * closing).
+   */
+  public int exec(String command, OutputStream dumpOutputStream) throws IOException, InterruptedException {
+    return exec(command, null, dumpOutputStream, false);
+  }
 
-	/**
-	 * Handy method for {@link #exec(String, File, OutputStream, boolean)} with
-	 * specified dump output stream (but no closing).
-	 */
-	public int exec(String command, File folder, OutputStream dumpOutputStream) throws IOException, InterruptedException {
-		return exec(command, folder, dumpOutputStream, false);
-	}
+  /**
+   * Handy method for {@link #exec(String, File, OutputStream, boolean)} with
+   * specified dump output stream (but no closing).
+   */
+  public int exec(String command, File folder, OutputStream dumpOutputStream) throws IOException, InterruptedException {
+    return exec(command, folder, dumpOutputStream, false);
+  }
 
-	/**
-	 * Executes the specified command.
-	 * 
-	 * @param command
-	 * @param folder
-	 * @param dumpOutputStream
-	 * @param closeDumpOutputStream
-	 * 
-	 * @return the exit value of the process (by convention, the value
-	 *         <code>0</code> indicates normal termination)
-	 * 
-	 * @throws IOException
-	 * @throws InterruptedException
-	 */
-	public int exec(String command, File folder, OutputStream dumpOutputStream, boolean closeDumpOutputStream) throws IOException, InterruptedException {
+  /**
+   * Executes the specified command.
+   * 
+   * @param command
+   * @param folder
+   * @param dumpOutputStream
+   * @param closeDumpOutputStream
+   * 
+   * @return the exit value of the process (by convention, the value
+   *         <code>0</code> indicates normal termination)
+   * 
+   * @throws IOException
+   * @throws InterruptedException
+   */
+  public int exec(String command, File folder, OutputStream dumpOutputStream, boolean closeDumpOutputStream) throws IOException, InterruptedException {
 
-		//
-		// add the prefix to the command
+    //
+    // add the prefix to the command
 
-		List<String> commandList = new ArrayList<String>(commandPrefix.size() + 1);
-		commandList.addAll(commandPrefix);
-		commandList.add(command);
+    List<String> commandList = new ArrayList<String>(commandPrefix.size() + 1);
+    commandList.addAll(commandPrefix);
+    commandList.add(command);
 
-		//
-		// create and start the process
+    //
+    // create and start the process
 
-		Process process = new ProcessBuilder(commandList).directory(folder).start();
+    Process process = new ProcessBuilder(commandList).directory(folder).start();
 
-		//
-		// exhaust both the standard error stream and the standard output stream
+    //
+    // exhaust both the standard error stream and the standard output stream
 
-		if (dumpOutputStream != null) {
-			new Thread(new InputStreamExhausterWithDumpStream(process.getInputStream(), dumpOutputStream, closeDumpOutputStream)).start();
-			new Thread(new InputStreamExhausterWithDumpStream(process.getErrorStream(), dumpOutputStream, closeDumpOutputStream)).start();
-		} else {
-			new Thread(new InputStreamExhauster(process.getInputStream())).start();
-			new Thread(new InputStreamExhauster(process.getErrorStream())).start();
-		}
+    if (dumpOutputStream != null) {
+      new Thread(new InputStreamExhausterWithDumpStream(process.getInputStream(), dumpOutputStream, closeDumpOutputStream)).start();
+      new Thread(new InputStreamExhausterWithDumpStream(process.getErrorStream(), dumpOutputStream, closeDumpOutputStream)).start();
+    } else {
+      new Thread(new InputStreamExhauster(process.getInputStream())).start();
+      new Thread(new InputStreamExhauster(process.getErrorStream())).start();
+    }
 
-		//
-		// wait until the process has terminated
+    //
+    // wait until the process has terminated
 
-		return process.waitFor();
-	}
+    return process.waitFor();
+  }
 
 }

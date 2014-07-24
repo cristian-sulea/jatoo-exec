@@ -26,30 +26,30 @@ import org.apache.commons.logging.LogFactory;
 /**
  * A class that will exhaust a provided {@link InputStream}.
  * 
- * @author Cristian Sulea ( http://cristian.sulea.net )
- * @version 1.3 November 8, 2013
+ * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
+ * @version 1.4, July 24, 2014
  */
 public class InputStreamExhauster implements Runnable {
 
-	private static final Log LOGGER = LogFactory.getLog(InputStreamExhauster.class);
+  private static final Log LOGGER = LogFactory.getLog(InputStreamExhauster.class);
 
-	private final InputStream processInputStream;
+  private final InputStream processInputStream;
 
-	public InputStreamExhauster(InputStream processInputStream) {
-		this.processInputStream = processInputStream;
-	}
+  public InputStreamExhauster(InputStream processInputStream) {
+    this.processInputStream = processInputStream;
+  }
 
-	public void exhaust() {
-		try {
-			while (processInputStream.read() != -1) {}
-		} catch (IOException e) {
-			LOGGER.error("error exhausting the stream", e);
-		}
-	}
+  public void exhaust() {
+    try {
+      while (processInputStream.read() != -1) {}
+    } catch (IOException e) {
+      LOGGER.error("error exhausting the stream", e);
+    }
+  }
 
-	@Override
-	public void run() {
-		exhaust();
-	}
+  @Override
+  public void run() {
+    exhaust();
+  }
 
 }
