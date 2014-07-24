@@ -35,7 +35,7 @@ public class InputStreamExhauster implements Runnable {
 
   private final InputStream processInputStream;
 
-  public InputStreamExhauster(InputStream processInputStream) {
+  public InputStreamExhauster(final InputStream processInputStream) {
     this.processInputStream = processInputStream;
   }
 

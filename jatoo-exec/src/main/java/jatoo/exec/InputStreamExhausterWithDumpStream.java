@@ -43,7 +43,7 @@ public class InputStreamExhausterWithDumpStream implements Runnable {
   private final OutputStream dumpOutputStream;
   private final boolean closeDumpOutputStream;
 
-  public InputStreamExhausterWithDumpStream(InputStream processInputStream, OutputStream dumpOutputStream, boolean closeDumpOutputStream) {
+  public InputStreamExhausterWithDumpStream(final InputStream processInputStream, final OutputStream dumpOutputStream, final boolean closeDumpOutputStream) {
     this.processInputStream = processInputStream;
     this.dumpOutputStream = dumpOutputStream;
     this.closeDumpOutputStream = closeDumpOutputStream;

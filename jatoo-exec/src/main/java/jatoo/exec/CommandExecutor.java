@@ -66,7 +66,7 @@ public class CommandExecutor {
    * Handy method for {@link #exec(String, File, OutputStream, boolean)} running
    * in working folder of JVM with no dump output stream.
    */
-  public int exec(String command) throws IOException, InterruptedException {
+  public int exec(final String command) throws IOException, InterruptedException {
     return exec(command, null, null, false);
   }
 
@@ -74,7 +74,7 @@ public class CommandExecutor {
    * Handy method for {@link #exec(String, File, OutputStream, boolean)} with no
    * dump output stream.
    */
-  public int exec(String command, File folder) throws IOException, InterruptedException {
+  public int exec(final String command, final File folder) throws IOException, InterruptedException {
     return exec(command, null, null, false);
   }
 
@@ -83,7 +83,7 @@ public class CommandExecutor {
    * in working folder of JVM with specified dump output stream (but no
    * closing).
    */
-  public int exec(String command, OutputStream dumpOutputStream) throws IOException, InterruptedException {
+  public int exec(final String command, final OutputStream dumpOutputStream) throws IOException, InterruptedException {
     return exec(command, null, dumpOutputStream, false);
   }
 
@@ -91,7 +91,7 @@ public class CommandExecutor {
    * Handy method for {@link #exec(String, File, OutputStream, boolean)} with
    * specified dump output stream (but no closing).
    */
-  public int exec(String command, File folder, OutputStream dumpOutputStream) throws IOException, InterruptedException {
+  public int exec(final String command, final File folder, final OutputStream dumpOutputStream) throws IOException, InterruptedException {
     return exec(command, folder, dumpOutputStream, false);
   }
 
@@ -109,7 +109,7 @@ public class CommandExecutor {
    * @throws IOException
    * @throws InterruptedException
    */
-  public int exec(String command, File folder, OutputStream dumpOutputStream, boolean closeDumpOutputStream) throws IOException, InterruptedException {
+  public int exec(final String command, final File folder, final OutputStream dumpOutputStream, final boolean closeDumpOutputStream) throws IOException, InterruptedException {
 
     //
     // add the prefix to the command
