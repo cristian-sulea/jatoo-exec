@@ -28,43 +28,42 @@ import org.junit.Test;
 /**
  * JUnit tests for {@link CommandExecutor}.
  * 
- * @author Cristian Sulea ( http://cristian.sulea.net )
- * @version 1.5 May 6, 2014
+ * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
+ * @version 1.6, July 24, 2014
  */
 public class CommandExecutorTest {
 
-	private static final boolean DUMP_TO_SYSTEM_OUT = true;
+  private static final boolean DUMP_TO_SYSTEM_OUT = true;
 
-	private static final File DIRECTORY_TESTS = new File("tests");
-	private static final File DIRECTORY_TESTS_TARGET = new File(DIRECTORY_TESTS, "target");
+  private static final File DIRECTORY_TESTS = new File(new File("target"), "tests");
+  private static final File DIRECTORY_TESTS_TARGET = new File(DIRECTORY_TESTS, "target");
 
-	private final CommandExecutor commandExecutor = new CommandExecutor();
+  private final CommandExecutor commandExecutor = new CommandExecutor();
 
-	@Before
-	public void initialize() throws Exception {
+  @Before
+  public void initialize() throws Exception {
 
-		DIRECTORY_TESTS.mkdirs();
-		Assert.assertTrue(DIRECTORY_TESTS.exists());
+    FileUtils.deleteDirectory(DIRECTORY_TESTS);
+    Assert.assertFalse(DIRECTORY_TESTS.exists());
 
-		FileUtils.copyFileToDirectory(new File("src/test/resources/pom.xml"), DIRECTORY_TESTS);
-	}
+    DIRECTORY_TESTS.mkdirs();
+    Assert.assertTrue(DIRECTORY_TESTS.exists());
 
-	@After
-	public void cleanup() throws Exception {
+    FileUtils.copyFileToDirectory(new File("src/test/resources/pom.xml"), DIRECTORY_TESTS);
+  }
 
-		FileUtils.deleteDirectory(DIRECTORY_TESTS);
-		Assert.assertFalse(DIRECTORY_TESTS.exists());
-	}
+  @After
+  public void cleanup() throws Exception {}
 
-	@Test
-	public void test() throws Exception {
+  @Test
+  public void test() throws Exception {
 
-		DIRECTORY_TESTS_TARGET.mkdirs();
-		Assert.assertTrue(DIRECTORY_TESTS_TARGET.exists());
+    DIRECTORY_TESTS_TARGET.mkdirs();
+    Assert.assertTrue(DIRECTORY_TESTS_TARGET.exists());
 
-		commandExecutor.exec("mvn clean", DIRECTORY_TESTS, DUMP_TO_SYSTEM_OUT ? System.out : null);
+    commandExecutor.exec("mvn clean", DIRECTORY_TESTS, DUMP_TO_SYSTEM_OUT ? System.out : null);
 
-		Assert.assertFalse(DIRECTORY_TESTS_TARGET.exists());
-	}
+    Assert.assertFalse(DIRECTORY_TESTS_TARGET.exists());
+  }
 
 }
