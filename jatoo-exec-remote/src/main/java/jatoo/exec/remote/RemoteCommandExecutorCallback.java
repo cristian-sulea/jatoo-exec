@@ -23,14 +23,14 @@ import com.jcraft.jsch.Channel;
  * Sometimes we want to do some things after the execution started (like a force
  * stop for example). This callback allows us to acquire such a behavior.
  * 
- * @author Cristian Sulea ( http://cristian.sulea.net )
- * @version 1.0 December 9, 2013
+ * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
+ * @version 1.1, July 24, 2014
  */
-public class RemoteCommandExecutorCallback {
+public final class RemoteCommandExecutorCallback {
 
-  protected Channel channel;
+  private Channel channel;
 
-  void setChannel(Channel channel) {
+  void setChannel(final Channel channel) {
     this.channel = channel;
   }
 

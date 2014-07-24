@@ -25,8 +25,8 @@ import org.junit.Test;
 /**
  * JUnit tests for {@link RemoteCommandExecutor}.
  * 
- * @author Cristian Sulea ( http://cristian.sulea.net )
- * @version 1.0 November 11, 2013
+ * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
+ * @version 1.1, July 24, 2014
  */
 public class RemoteCommandExecutorTest {
 

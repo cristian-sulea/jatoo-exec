@@ -34,18 +34,19 @@ import com.jcraft.jsch.Session;
 /**
  * Handy class to ease the remote execution of commands.
  * 
- * @author Cristian Sulea ( http://cristian.sulea.net )
- * @version 1.2 December 10, 2013
+ * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
+ * @version 1.3, July 24, 2014
  */
-public class RemoteCommandExecutor {
+public final class RemoteCommandExecutor {
 
-  private static final Log LOGGER = LogFactory.getLog(RemoteCommandExecutor.class);
+  /** The logger. */
+  private final Log logger = LogFactory.getLog(RemoteCommandExecutor.class);
 
   private Session session;
 
   public RemoteCommandExecutor() {}
 
-  public void connect(String host, int port, String username, String password) throws JSchException {
+  public void connect(final String host, final int port, final String username, final String password) throws JSchException {
 
     if (isConnected()) {
       disconnect();
@@ -68,7 +69,7 @@ public class RemoteCommandExecutor {
       session.disconnect();
       session = null;
     } else {
-      LOGGER.info("session == null (probably never connected)");
+      logger.info("session == null (probably never connected)");
     }
   }
 
@@ -76,7 +77,7 @@ public class RemoteCommandExecutor {
    * Handy method for {@link #exec(String, OutputStream, boolean)} with no dump
    * output stream.
    */
-  public int exec(String command) throws JSchException, IOException {
+  public int exec(final String command) throws JSchException, IOException {
     return exec(command, null, false);
   }
 
@@ -84,7 +85,7 @@ public class RemoteCommandExecutor {
    * Handy method for {@link #exec(String, OutputStream, boolean)} with
    * specified dump output stream (but no closing).
    */
-  public int exec(String command, OutputStream dumpOutputStream) throws JSchException, IOException {
+  public int exec(final String command, final OutputStream dumpOutputStream) throws JSchException, IOException {
     return exec(command, dumpOutputStream, false);
   }
 
@@ -102,7 +103,7 @@ public class RemoteCommandExecutor {
    * @throws IOException
    * @throws JSchException
    */
-  public int exec(String command, OutputStream dumpOutputStream, boolean closeDumpOutputStream) throws IOException, JSchException {
+  public int exec(final String command, final OutputStream dumpOutputStream, final boolean closeDumpOutputStream) throws IOException, JSchException {
     return exec(command, dumpOutputStream, closeDumpOutputStream, null);
   }
 
@@ -121,7 +122,7 @@ public class RemoteCommandExecutor {
    * @throws IOException
    * @throws JSchException
    */
-  public int exec(String command, OutputStream dumpOutputStream, boolean closeDumpOutputStream, RemoteCommandExecutorCallback callback) throws IOException, JSchException {
+  public int exec(final String command, final OutputStream dumpOutputStream, final boolean closeDumpOutputStream, final RemoteCommandExecutorCallback callback) throws IOException, JSchException {
 
     ChannelExec channel = (ChannelExec) session.openChannel("exec");
     channel.setCommand(command);

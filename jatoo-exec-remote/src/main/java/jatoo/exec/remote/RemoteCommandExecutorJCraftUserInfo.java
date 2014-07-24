@@ -25,33 +25,34 @@ import com.jcraft.jsch.UserInfo;
 /**
  * Simple implementation for {@link UserInfo}.
  * 
- * @author Cristian Sulea ( http://cristian.sulea.net )
- * @version 1.1, December 5, 2013
+ * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
+ * @version 1.2, July 24, 2014
  */
-public class RemoteCommandExecutorJCraftUserInfo implements UserInfo {
+public final class RemoteCommandExecutorJCraftUserInfo implements UserInfo {
 
-  private static final Log LOGGER = LogFactory.getLog(RemoteCommandExecutorJCraftUserInfo.class);
+  /** The logger. */
+  private final Log logger = LogFactory.getLog(RemoteCommandExecutorJCraftUserInfo.class);
 
-  private String password;
+  private final String password;
 
   private boolean isAlreadyPrompted = false;
 
-  public RemoteCommandExecutorJCraftUserInfo(String password) {
+  public RemoteCommandExecutorJCraftUserInfo(final String password) {
     this.password = password;
   }
 
   @Override
-  public boolean promptPassword(String message) {
+  public boolean promptPassword(final String message) {
 
     if (isAlreadyPrompted) {
-      LOGGER.error("Something went wrong, we are prompted again for passwordat. Maybe wrong password?");
+      logger.error("Something went wrong, we are prompted again for passwordat. Maybe wrong password?");
       throw new RuntimeException("Wrong password?");
     }
 
     isAlreadyPrompted = true;
 
-    LOGGER.info(message);
-    LOGGER.info("No need to prompt for password, the password was passed through constructor.");
+    logger.info(message);
+    logger.info("No need to prompt for password, the password was passed through constructor.");
     return true;
   }
 
@@ -61,21 +62,21 @@ public class RemoteCommandExecutorJCraftUserInfo implements UserInfo {
   }
 
   @Override
-  public boolean promptYesNo(String message) {
-    LOGGER.info(message);
-    LOGGER.info("Auto accepting the fingerprint, because I was told to do so.");
+  public boolean promptYesNo(final String message) {
+    logger.info(message);
+    logger.info("Auto accepting the fingerprint, because I was told to do so.");
     return true;
   }
 
   @Override
-  public void showMessage(String message) {
-    LOGGER.info(message);
+  public void showMessage(final String message) {
+    logger.info(message);
   }
 
   @Override
-  public boolean promptPassphrase(String message) {
-    LOGGER.info(message);
-    LOGGER.info("No need to prompt for passphrase, the method #getPassphrase() will always return null.");
+  public boolean promptPassphrase(final String message) {
+    logger.info(message);
+    logger.info("No need to prompt for passphrase, the method #getPassphrase() will always return null.");
     return true;
   }
 
