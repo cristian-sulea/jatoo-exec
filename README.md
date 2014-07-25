@@ -1,6 +1,6 @@
 # JaToo Exec
 
-A Java Open Source library created to ease the work with external processes execution.
+A free open source Java library created to ease the work with external processes execution.
 
 
 ## Licensing
