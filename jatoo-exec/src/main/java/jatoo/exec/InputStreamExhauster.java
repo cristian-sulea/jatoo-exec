@@ -27,7 +27,7 @@ import org.apache.commons.logging.LogFactory;
  * A class that will exhaust a provided {@link InputStream}.
  * 
  * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
- * @version 1.4, July 24, 2014
+ * @version 1.4, July 25, 2014
  */
 public class InputStreamExhauster implements Runnable {
 
@@ -39,7 +39,7 @@ public class InputStreamExhauster implements Runnable {
     this.processInputStream = processInputStream;
   }
 
-  public void exhaust() {
+  public final void exhaust() {
     try {
       while (processInputStream.read() != -1) {}
     } catch (IOException e) {
@@ -48,7 +48,7 @@ public class InputStreamExhauster implements Runnable {
   }
 
   @Override
-  public void run() {
+  public final void run() {
     exhaust();
   }
 

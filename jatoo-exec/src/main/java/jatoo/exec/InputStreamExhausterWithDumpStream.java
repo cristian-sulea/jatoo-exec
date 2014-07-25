@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  * contents to a specified stream..
  * 
  * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
- * @version 1.6, July 24, 2014
+ * @version 1.6, July 25, 2014
  */
 public class InputStreamExhausterWithDumpStream implements Runnable {
 
@@ -49,7 +49,7 @@ public class InputStreamExhausterWithDumpStream implements Runnable {
     this.closeDumpOutputStream = closeDumpOutputStream;
   }
 
-  public void exhaust() {
+  public final void exhaust() {
 
     BufferedReader processInputStreamReader = null;
     BufferedWriter dumpOutputStreamWriter = null;
@@ -74,20 +74,18 @@ public class InputStreamExhausterWithDumpStream implements Runnable {
     }
 
     finally {
-      if (closeDumpOutputStream) {
-        if (dumpOutputStreamWriter != null) {
-          try {
-            dumpOutputStreamWriter.close();
-          } catch (IOException e) {
-            LOGGER.error("error closing the dump stream", e);
-          }
+      if (closeDumpOutputStream && dumpOutputStreamWriter != null) {
+        try {
+          dumpOutputStreamWriter.close();
+        } catch (IOException e) {
+          LOGGER.error("error closing the dump stream", e);
         }
       }
     }
   }
 
   @Override
-  public void run() {
+  public final void run() {
     exhaust();
   }
 

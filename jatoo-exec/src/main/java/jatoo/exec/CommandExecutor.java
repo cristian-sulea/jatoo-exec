@@ -30,7 +30,7 @@ import java.util.List;
  * TODO: WARNING: not tested on Linux
  * 
  * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
- * @version 1.5, July 24, 2014
+ * @version 1.5, July 25, 2014
  */
 public class CommandExecutor {
 
@@ -65,16 +65,42 @@ public class CommandExecutor {
   /**
    * Handy method for {@link #exec(String, File, OutputStream, boolean)} running
    * in working folder of JVM with no dump output stream.
+   * 
+   * @param command
+   *          the command to be executed
+   * 
+   * @return the exit value of the process (by convention, the value
+   *         <code>0</code> indicates normal termination)
+   * 
+   * @throws IOException
+   *           if an I/O error occurs
+   * @throws InterruptedException
+   *           if the current thread is {@linkplain Thread#interrupt()
+   *           interrupted} by another thread while it is waiting
    */
-  public int exec(final String command) throws IOException, InterruptedException {
+  public final int exec(final String command) throws IOException, InterruptedException {
     return exec(command, null, null, false);
   }
 
   /**
    * Handy method for {@link #exec(String, File, OutputStream, boolean)} with no
    * dump output stream.
+   * 
+   * @param command
+   *          the command to be executed
+   * @param folder
+   *          the working folder
+   * 
+   * @return the exit value of the process (by convention, the value
+   *         <code>0</code> indicates normal termination)
+   * 
+   * @throws IOException
+   *           if an I/O error occurs
+   * @throws InterruptedException
+   *           if the current thread is {@linkplain Thread#interrupt()
+   *           interrupted} by another thread while it is waiting
    */
-  public int exec(final String command, final File folder) throws IOException, InterruptedException {
+  public final int exec(final String command, final File folder) throws IOException, InterruptedException {
     return exec(command, null, null, false);
   }
 
@@ -82,16 +108,46 @@ public class CommandExecutor {
    * Handy method for {@link #exec(String, File, OutputStream, boolean)} running
    * in working folder of JVM with specified dump output stream (but no
    * closing).
+   * 
+   * @param command
+   *          the command to be executed
+   * @param dumpOutputStream
+   *          the stream where the process will dump (exhaust) his contents
+   * 
+   * @return the exit value of the process (by convention, the value
+   *         <code>0</code> indicates normal termination)
+   * 
+   * @throws IOException
+   *           if an I/O error occurs
+   * @throws InterruptedException
+   *           if the current thread is {@linkplain Thread#interrupt()
+   *           interrupted} by another thread while it is waiting
    */
-  public int exec(final String command, final OutputStream dumpOutputStream) throws IOException, InterruptedException {
+  public final int exec(final String command, final OutputStream dumpOutputStream) throws IOException, InterruptedException {
     return exec(command, null, dumpOutputStream, false);
   }
 
   /**
    * Handy method for {@link #exec(String, File, OutputStream, boolean)} with
    * specified dump output stream (but no closing).
+   * 
+   * @param command
+   *          the command to be executed
+   * @param folder
+   *          the working folder
+   * @param dumpOutputStream
+   *          the stream where the process will dump (exhaust) his contents
+   * 
+   * @return the exit value of the process (by convention, the value
+   *         <code>0</code> indicates normal termination)
+   * 
+   * @throws IOException
+   *           if an I/O error occurs
+   * @throws InterruptedException
+   *           if the current thread is {@linkplain Thread#interrupt()
+   *           interrupted} by another thread while it is waiting
    */
-  public int exec(final String command, final File folder, final OutputStream dumpOutputStream) throws IOException, InterruptedException {
+  public final int exec(final String command, final File folder, final OutputStream dumpOutputStream) throws IOException, InterruptedException {
     return exec(command, folder, dumpOutputStream, false);
   }
 
@@ -99,17 +155,26 @@ public class CommandExecutor {
    * Executes the specified command.
    * 
    * @param command
+   *          the command to be executed
    * @param folder
+   *          the working folder
+   * 
    * @param dumpOutputStream
+   *          the stream where the process will dump (exhaust) his contents
    * @param closeDumpOutputStream
+   *          <code>true</code> if the dump stream should be closed when the
+   *          execution ends, <code>false</code> otherwise
    * 
    * @return the exit value of the process (by convention, the value
    *         <code>0</code> indicates normal termination)
    * 
    * @throws IOException
+   *           if an I/O error occurs
    * @throws InterruptedException
+   *           if the current thread is {@linkplain Thread#interrupt()
+   *           interrupted} by another thread while it is waiting
    */
-  public int exec(final String command, final File folder, final OutputStream dumpOutputStream, final boolean closeDumpOutputStream) throws IOException, InterruptedException {
+  public final int exec(final String command, final File folder, final OutputStream dumpOutputStream, final boolean closeDumpOutputStream) throws IOException, InterruptedException {
 
     //
     // add the prefix to the command
