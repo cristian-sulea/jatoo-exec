@@ -101,7 +101,7 @@ public class CommandExecutor {
    *           interrupted} by another thread while it is waiting
    */
   public final int exec(final String command, final File folder) throws IOException, InterruptedException {
-    return exec(command, null, null, false);
+    return exec(command, folder, null, false);
   }
 
   /**
