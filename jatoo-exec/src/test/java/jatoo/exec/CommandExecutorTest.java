@@ -29,7 +29,7 @@ import org.junit.Test;
  * JUnit tests for {@link CommandExecutor}.
  * 
  * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
- * @version 1.6, July 24, 2014
+ * @version 1.7, July 28, 2014
  */
 public class CommandExecutorTest {
 
@@ -38,18 +38,11 @@ public class CommandExecutorTest {
   private static final File DIRECTORY_TESTS = new File(new File("target"), "tests");
   private static final File DIRECTORY_TESTS_TARGET = new File(DIRECTORY_TESTS, "target");
 
-  private final CommandExecutor commandExecutor = new CommandExecutor();
+  private final CommandExecutor executor = new CommandExecutor();
 
   @Before
   public void initialize() throws Exception {
 
-    FileUtils.deleteDirectory(DIRECTORY_TESTS);
-    Assert.assertFalse(DIRECTORY_TESTS.exists());
-
-    DIRECTORY_TESTS.mkdirs();
-    Assert.assertTrue(DIRECTORY_TESTS.exists());
-
-    FileUtils.copyFileToDirectory(new File("src/test/resources/pom.xml"), DIRECTORY_TESTS);
   }
 
   @After
@@ -58,12 +51,27 @@ public class CommandExecutorTest {
   @Test
   public void test() throws Exception {
 
+    FileUtils.deleteDirectory(DIRECTORY_TESTS);
+    Assert.assertFalse(DIRECTORY_TESTS.exists());
+
+    DIRECTORY_TESTS.mkdirs();
+    Assert.assertTrue(DIRECTORY_TESTS.exists());
+
+    FileUtils.copyFileToDirectory(new File("src/test/resources/pom.xml"), DIRECTORY_TESTS);
+
     DIRECTORY_TESTS_TARGET.mkdirs();
     Assert.assertTrue(DIRECTORY_TESTS_TARGET.exists());
 
-    commandExecutor.exec("mvn clean", DIRECTORY_TESTS, DUMP_TO_SYSTEM_OUT ? System.out : null);
+    executor.exec("mvn clean", DIRECTORY_TESTS, DUMP_TO_SYSTEM_OUT ? System.out : null);
 
     Assert.assertFalse(DIRECTORY_TESTS_TARGET.exists());
   }
 
+  @Test
+  public void test2() throws Exception {
+
+    executor.exec("dir", System.out);
+    executor.exec("dir", new File("c:\\Users\\Public\\Pictures\\Sample Pictures"), System.out);
+//    executor.exec("dir >> list.txt", new File("c:\\Users\\Public\\Pictures\\Sample Pictures"));
+  }
 }
