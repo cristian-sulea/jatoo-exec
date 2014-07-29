@@ -158,7 +158,6 @@ public class CommandExecutor {
    *          the command to be executed
    * @param folder
    *          the working folder
-   * 
    * @param dumpOutputStream
    *          the stream where the process will dump (exhaust) his contents
    * @param closeDumpOutputStream
