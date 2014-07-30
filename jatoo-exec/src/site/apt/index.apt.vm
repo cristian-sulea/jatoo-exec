@@ -12,7 +12,7 @@ JaToo Exec
 	A free open source Java library created to ease the work with external processes execution.
 
 
-* Quick start
+* Usage
 
 +---+
 CommandExecutor executor = new CommandExecutor();
