@@ -76,7 +76,7 @@ public class CommandExecutor {
   }
 
   /**
-   * Returns <code>true</code> if the OS is a Windows version;
+   * Returns <code>true</code> if the OS is a Windows version.
    * 
    * @return <code>true</code> if the OS is a Windows version, <code>false</code> otherwise
    */
