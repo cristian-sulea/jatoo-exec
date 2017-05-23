@@ -1,18 +1,17 @@
 /*
- * Copyright (C) 2014 Cristian Sulea ( http://cristian.sulea.net )
+ * Copyright (C) Cristian Sulea ( http://cristian.sulea.net )
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package jatoo.exec;
@@ -23,129 +22,146 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Handy class to ease the execution of operating system commands.
  * 
- * TODO: WARNING: not tested on Linux
+ * <strong>WARNING</strong>: not tested on Linux
  * 
  * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
- * @version 1.5, July 25, 2014
+ * @version 1.6, May 23, 2017
  */
 public class CommandExecutor {
 
+  /** The command prefix (OS dependent). */
   private final List<String> commandPrefix;
 
+  /** The OS is a Windows version. */
+  private boolean isWindows = false;
+
+  /**
+   * Constructs a new command executor, trying to detect the OS.
+   */
   public CommandExecutor() {
 
-    String osName = System.getProperty("os.name");
+    String osName = String.valueOf(System.getProperty("os.name")).toLowerCase(Locale.ENGLISH);
 
-    //
-    // Linux systems (WARNING: not tested)
+    if (osName.contains("windows")) {
 
-    if (osName.equals("Linux")) {
-      commandPrefix = new ArrayList<String>(0);
+      isWindows = true;
+
+      //
+      // old Windows systems
+
+      if (osName.equals("Windows 95") || osName.equals("Windows 98") || osName.equalsIgnoreCase("Windows ME")) {
+        commandPrefix = Arrays.asList("command.com", "/C");
+      }
+
+      //
+      // modern (others) Windows systems
+
+      else {
+        commandPrefix = Arrays.asList("cmd.exe", "/C");
+      }
     }
-
-    //
-    // old Windows systems
-
-    else if (osName.equals("Windows 95") || osName.equals("Windows 98") || osName.equalsIgnoreCase("Windows ME")) {
-      commandPrefix = Arrays.asList("command.com", "/C");
-    }
-
-    //
-    // modern (others) Windows systems
 
     else {
-      commandPrefix = Arrays.asList("cmd.exe", "/C");
+
+      //
+      // other systems
+
+      commandPrefix = new ArrayList<String>(0);
     }
   }
 
   /**
-   * Handy method for {@link #exec(String, File, OutputStream, boolean)} running
-   * in working folder of JVM with no dump output stream.
+   * Returns <code>true</code> if the OS is a Windows version;
+   * 
+   * @return <code>true</code> if the OS is a Windows version, <code>false</code> otherwise
+   */
+  public boolean isWindows() {
+    return isWindows;
+  }
+
+  /**
+   * Handy method for {@link #exec(String, File, OutputStream, boolean)} running in working folder of JVM with no dump
+   * output stream.
    * 
    * @param command
    *          the command to be executed
    * 
-   * @return the exit value of the process (by convention, the value
-   *         <code>0</code> indicates normal termination)
+   * @return the exit value of the process (by convention, the value <code>0</code> indicates normal termination)
    * 
    * @throws IOException
    *           if an I/O error occurs
    * @throws InterruptedException
-   *           if the current thread is {@linkplain Thread#interrupt()
-   *           interrupted} by another thread while it is waiting
+   *           if the current thread is {@linkplain Thread#interrupt() interrupted} by another thread while it is
+   *           waiting
    */
   public final int exec(final String command) throws IOException, InterruptedException {
-    return exec(command, null, null, false);
+    return exec(command, null, null);
   }
 
   /**
-   * Handy method for {@link #exec(String, File, OutputStream, boolean)} with no
-   * dump output stream.
+   * Handy method for {@link #exec(String, File, OutputStream, boolean)} with no dump output stream.
    * 
    * @param command
    *          the command to be executed
    * @param folder
    *          the working folder
    * 
-   * @return the exit value of the process (by convention, the value
-   *         <code>0</code> indicates normal termination)
+   * @return the exit value of the process (by convention, the value <code>0</code> indicates normal termination)
    * 
    * @throws IOException
    *           if an I/O error occurs
    * @throws InterruptedException
-   *           if the current thread is {@linkplain Thread#interrupt()
-   *           interrupted} by another thread while it is waiting
+   *           if the current thread is {@linkplain Thread#interrupt() interrupted} by another thread while it is
+   *           waiting
    */
   public final int exec(final String command, final File folder) throws IOException, InterruptedException {
-    return exec(command, folder, null, false);
+    return exec(command, folder, null);
   }
 
   /**
-   * Handy method for {@link #exec(String, File, OutputStream, boolean)} running
-   * in working folder of JVM with specified dump output stream (but no
+   * Handy method for {@link #exec(String, File, OutputStream, boolean)} running in working folder of JVM with specified
+   * dump output stream (but no closing).
+   * 
+   * @param command
+   *          the command to be executed
+   * @param dumpOutputStream
+   *          the stream where the process will dump (exhaust) his contents
+   * 
+   * @return the exit value of the process (by convention, the value <code>0</code> indicates normal termination)
+   * 
+   * @throws IOException
+   *           if an I/O error occurs
+   * @throws InterruptedException
+   *           if the current thread is {@linkplain Thread#interrupt() interrupted} by another thread while it is
+   *           waiting
+   */
+  public final int exec(final String command, final OutputStream dumpOutputStream) throws IOException, InterruptedException {
+    return exec(command, null, dumpOutputStream);
+  }
+
+  /**
+   * Handy method for {@link #exec(String, File, OutputStream, boolean)} with specified dump output stream (but no
    * closing).
    * 
    * @param command
    *          the command to be executed
-   * @param dumpOutputStream
-   *          the stream where the process will dump (exhaust) his contents
-   * 
-   * @return the exit value of the process (by convention, the value
-   *         <code>0</code> indicates normal termination)
-   * 
-   * @throws IOException
-   *           if an I/O error occurs
-   * @throws InterruptedException
-   *           if the current thread is {@linkplain Thread#interrupt()
-   *           interrupted} by another thread while it is waiting
-   */
-  public final int exec(final String command, final OutputStream dumpOutputStream) throws IOException, InterruptedException {
-    return exec(command, null, dumpOutputStream, false);
-  }
-
-  /**
-   * Handy method for {@link #exec(String, File, OutputStream, boolean)} with
-   * specified dump output stream (but no closing).
-   * 
-   * @param command
-   *          the command to be executed
    * @param folder
    *          the working folder
    * @param dumpOutputStream
    *          the stream where the process will dump (exhaust) his contents
    * 
-   * @return the exit value of the process (by convention, the value
-   *         <code>0</code> indicates normal termination)
+   * @return the exit value of the process (by convention, the value <code>0</code> indicates normal termination)
    * 
    * @throws IOException
    *           if an I/O error occurs
    * @throws InterruptedException
-   *           if the current thread is {@linkplain Thread#interrupt()
-   *           interrupted} by another thread while it is waiting
+   *           if the current thread is {@linkplain Thread#interrupt() interrupted} by another thread while it is
+   *           waiting
    */
   public final int exec(final String command, final File folder, final OutputStream dumpOutputStream) throws IOException, InterruptedException {
     return exec(command, folder, dumpOutputStream, false);
@@ -161,17 +177,16 @@ public class CommandExecutor {
    * @param dumpOutputStream
    *          the stream where the process will dump (exhaust) his contents
    * @param closeDumpOutputStream
-   *          <code>true</code> if the dump stream should be closed when the
-   *          execution ends, <code>false</code> otherwise
+   *          <code>true</code> if the dump stream should be closed when the execution ends, <code>false</code>
+   *          otherwise
    * 
-   * @return the exit value of the process (by convention, the value
-   *         <code>0</code> indicates normal termination)
+   * @return the exit value of the process (by convention, the value <code>0</code> indicates normal termination)
    * 
    * @throws IOException
    *           if an I/O error occurs
    * @throws InterruptedException
-   *           if the current thread is {@linkplain Thread#interrupt()
-   *           interrupted} by another thread while it is waiting
+   *           if the current thread is {@linkplain Thread#interrupt() interrupted} by another thread while it is
+   *           waiting
    */
   public final int exec(final String command, final File folder, final OutputStream dumpOutputStream, final boolean closeDumpOutputStream) throws IOException, InterruptedException {
 

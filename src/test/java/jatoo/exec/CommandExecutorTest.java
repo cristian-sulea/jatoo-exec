@@ -1,25 +1,23 @@
 /*
- * Copyright (C) 2014 Cristian Sulea ( http://cristian.sulea.net )
+ * Copyright (C) Cristian Sulea ( http://cristian.sulea.net )
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package jatoo.exec;
 
 import java.io.File;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,49 +27,48 @@ import org.junit.Test;
  * JUnit tests for {@link CommandExecutor}.
  * 
  * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
- * @version 1.7, July 28, 2014
+ * @version 2.0, May 23, 2017
  */
 public class CommandExecutorTest {
-
-  private static final boolean DUMP_TO_SYSTEM_OUT = true;
-
-  private static final File DIRECTORY_TESTS = new File(new File("target"), "tests");
-  private static final File DIRECTORY_TESTS_TARGET = new File(DIRECTORY_TESTS, "target");
 
   private final CommandExecutor executor = new CommandExecutor();
 
   @Before
-  public void initialize() throws Exception {
-
+  public void initialize() throws Throwable {
+    new File("target\\CommandExecutorTest.java").delete();
+    new File("target\\CommandExecutorTest.txt").delete();
   }
 
   @After
-  public void cleanup() throws Exception {}
-
-  @Test
-  public void test() throws Exception {
-
-    FileUtils.deleteDirectory(DIRECTORY_TESTS);
-    Assert.assertFalse(DIRECTORY_TESTS.exists());
-
-    DIRECTORY_TESTS.mkdirs();
-    Assert.assertTrue(DIRECTORY_TESTS.exists());
-
-    FileUtils.copyFileToDirectory(new File("src/test/resources/pom.xml"), DIRECTORY_TESTS);
-
-    DIRECTORY_TESTS_TARGET.mkdirs();
-    Assert.assertTrue(DIRECTORY_TESTS_TARGET.exists());
-
-    executor.exec("mvn clean", DIRECTORY_TESTS, DUMP_TO_SYSTEM_OUT ? System.out : null);
-
-    Assert.assertFalse(DIRECTORY_TESTS_TARGET.exists());
+  public void cleanup() throws Throwable {
+    new File("target\\CommandExecutorTest.java").delete();
+    new File("target\\CommandExecutorTest.txt").delete();
   }
 
   @Test
-  public void test2() throws Exception {
+  public void test1() throws Throwable {
 
-    executor.exec("dir", System.out);
-    executor.exec("dir", new File("c:\\Users\\Public\\Pictures\\Sample Pictures"), System.out);
-//    executor.exec("dir >> list.txt", new File("c:\\Users\\Public\\Pictures\\Sample Pictures"));
+    if (!executor.isWindows()) {
+      return;
+    }
+
+    Assert.assertFalse(new File("target\\CommandExecutorTest.txt").exists());
+    executor.exec("dir /s src > target\\CommandExecutorTest.txt", System.out);
+    Assert.assertTrue(new File("target\\CommandExecutorTest.txt").exists());
   }
+
+  @Test
+  public void test2() throws Throwable {
+
+    if (!executor.isWindows()) {
+      return;
+    }
+
+    Assert.assertFalse(new File("target\\CommandExecutorTest.java").exists());
+    executor.exec("copy src\\test\\java\\jatoo\\exec\\CommandExecutorTest.java target", System.out);
+    Assert.assertTrue(new File("target\\CommandExecutorTest.java").exists());
+
+    executor.exec("mvn", new File("target"), System.out);
+  }
+
 }

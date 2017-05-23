@@ -1,18 +1,17 @@
 /*
- * Copyright (C) 2014 Cristian Sulea ( http://cristian.sulea.net )
+ * Copyright (C) Cristian Sulea ( http://cristian.sulea.net )
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package jatoo.exec;
@@ -24,40 +23,64 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * A class that will exhaust a provided {@link InputStream} but dumping the
- * contents to a specified stream..
+ * A class that will exhaust a provided {@link InputStream} but dumping the contents to a specified stream.
  * 
  * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
  * @version 1.6, July 25, 2014
  */
 public class InputStreamExhausterWithDumpStream implements Runnable {
 
-  private static final Log LOGGER = LogFactory.getLog(InputStreamExhausterWithDumpStream.class);
+  /** The logger. */
+  private static final Log logger = LogFactory.getLog(InputStreamExhausterWithDumpStream.class);
 
+  /** The stream to be exhausted. */
   private final InputStream processInputStream;
+
+  /** The stream to collect the dumped content. */
   private final OutputStream dumpOutputStream;
+
+  /** If <code>true</code> then the dump stream should be closed at the end. */
   private final boolean closeDumpOutputStream;
 
+  /**
+   * Constructs a new stream exhauster.
+   * 
+   * @param processInputStream
+   *          the stream to be exhausted
+   * @param dumpOutputStream
+   *          the stream to collect the dumped content
+   * @param closeDumpOutputStream
+   *          <code>true</code> if the dump stream should be closed at the end, <code>false</code> otherwise
+   */
   public InputStreamExhausterWithDumpStream(final InputStream processInputStream, final OutputStream dumpOutputStream, final boolean closeDumpOutputStream) {
     this.processInputStream = processInputStream;
     this.dumpOutputStream = dumpOutputStream;
     this.closeDumpOutputStream = closeDumpOutputStream;
   }
 
-  public final void exhaust() {
+  @Override
+  public final void run() {
+    exhaust();
+  }
+
+  /**
+   * Exhaust the provided input stream, dumping the contents to the specified stream.
+   */
+  private void exhaust() {
 
     BufferedReader processInputStreamReader = null;
     BufferedWriter dumpOutputStreamWriter = null;
 
     try {
 
-      processInputStreamReader = new BufferedReader(new InputStreamReader(processInputStream));
-      dumpOutputStreamWriter = new BufferedWriter(new OutputStreamWriter(dumpOutputStream));
+      processInputStreamReader = new BufferedReader(new InputStreamReader(processInputStream, Charset.defaultCharset()));
+      dumpOutputStreamWriter = new BufferedWriter(new OutputStreamWriter(dumpOutputStream, Charset.defaultCharset()));
 
       String line = null;
       while ((line = processInputStreamReader.readLine()) != null) {
@@ -70,7 +93,7 @@ public class InputStreamExhausterWithDumpStream implements Runnable {
     }
 
     catch (IOException e) {
-      LOGGER.error("error exhausting the stream", e);
+      logger.error("error exhausting the stream", e);
     }
 
     finally {
@@ -78,15 +101,10 @@ public class InputStreamExhausterWithDumpStream implements Runnable {
         try {
           dumpOutputStreamWriter.close();
         } catch (IOException e) {
-          LOGGER.error("error closing the dump stream", e);
+          logger.error("error closing the dump stream", e);
         }
       }
     }
-  }
-
-  @Override
-  public final void run() {
-    exhaust();
   }
 
 }

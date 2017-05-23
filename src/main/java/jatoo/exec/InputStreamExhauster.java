@@ -1,18 +1,17 @@
 /*
- * Copyright (C) 2014 Cristian Sulea ( http://cristian.sulea.net )
+ * Copyright (C) Cristian Sulea ( http://cristian.sulea.net )
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package jatoo.exec;
@@ -27,29 +26,47 @@ import org.apache.commons.logging.LogFactory;
  * A class that will exhaust a provided {@link InputStream}.
  * 
  * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
- * @version 1.4, July 25, 2014
+ * @version 1.5, May 23, 2017
  */
 public class InputStreamExhauster implements Runnable {
 
-  private static final Log LOGGER = LogFactory.getLog(InputStreamExhauster.class);
+  /** The logger. */
+  private static final Log logger = LogFactory.getLog(InputStreamExhauster.class);
 
+  /** The stream to be exhausted. */
   private final InputStream processInputStream;
 
+  /**
+   * Constructs a new stream exhauster.
+   * 
+   * @param processInputStream
+   *          the stream to be exhausted
+   */
   public InputStreamExhauster(final InputStream processInputStream) {
     this.processInputStream = processInputStream;
-  }
-
-  public final void exhaust() {
-    try {
-      while (processInputStream.read() != -1) {}
-    } catch (IOException e) {
-      LOGGER.error("error exhausting the stream", e);
-    }
   }
 
   @Override
   public final void run() {
     exhaust();
+  }
+
+  /**
+   * Exhaust the provided input stream, reading until EOF has been encountered.
+   */
+  private void exhaust() {
+
+    final byte[] buffer = new byte[1024];
+
+    try {
+      // CHECKSTYLE:OFF
+      while (processInputStream.read(buffer) >= 0) {}
+      // CHECKSTYLE:ON
+    }
+
+    catch (IOException e) {
+      logger.error("error exhausting the stream", e);
+    }
   }
 
 }
