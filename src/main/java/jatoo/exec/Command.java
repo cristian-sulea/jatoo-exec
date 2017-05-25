@@ -30,7 +30,7 @@ import java.util.Locale;
  * <strong>WARNING</strong>: not tested on Linux
  * 
  * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
- * @version 1.0-SNAPSHOT, May 24, 2017
+ * @version 1.0-SNAPSHOT, May 25, 2017
  */
 public class Command {
 
@@ -83,12 +83,6 @@ public class Command {
   /** The working folder (directory). */
   private File folder = null;
 
-  /** The stream where the process will dump (exhaust) his contents. */
-  private OutputStream dumpOutputStream = null;
-
-  /** The dump stream should be closed when the execution ends. */
-  private boolean closeDumpOutputStream = false;
-
   /**
    * Constructs a new command for the specified program.
    * 
@@ -111,22 +105,6 @@ public class Command {
     return folder;
   }
 
-  public final void setDumpOutputStream(final OutputStream dumpOutputStream) {
-    this.dumpOutputStream = dumpOutputStream;
-  }
-
-  public final OutputStream getDumpOutputStream() {
-    return dumpOutputStream;
-  }
-
-  public final void setCloseDumpOutputStream(final boolean closeDumpOutputStream) {
-    this.closeDumpOutputStream = closeDumpOutputStream;
-  }
-
-  public final boolean isCloseDumpOutputStream() {
-    return closeDumpOutputStream;
-  }
-
   /**
    * Executes this command with the specified arguments.
    * 
@@ -142,6 +120,49 @@ public class Command {
    *           waiting
    */
   public final int exec(final String... arguments) throws IOException, InterruptedException {
+    return exec(null, arguments);
+  }
+
+  /**
+   * Executes this command with the specified arguments.
+   * 
+   * @param dumpOutputStream
+   *          the stream where the process will dump (exhaust) his contents
+   * @param arguments
+   *          the arguments to be used for this execution
+   * 
+   * @return the exit value of the process (by convention, the value <code>0</code> indicates normal termination)
+   * 
+   * @throws IOException
+   *           if an I/O error occurs
+   * @throws InterruptedException
+   *           if the current thread is {@linkplain Thread#interrupt() interrupted} by another thread while it is
+   *           waiting
+   */
+  public final int exec(final OutputStream dumpOutputStream, final String... arguments) throws IOException, InterruptedException {
+    return exec(dumpOutputStream, false, arguments);
+  }
+
+  /**
+   * Executes this command with the specified arguments.
+   * 
+   * @param dumpOutputStream
+   *          the stream where the process will dump (exhaust) his contents
+   * @param closeDumpOutputStream
+   *          <code>true</code> if the dump stream should be closed when the execution ends, <code>false</code>
+   *          otherwise
+   * @param arguments
+   *          the arguments to be used for this execution
+   * 
+   * @return the exit value of the process (by convention, the value <code>0</code> indicates normal termination)
+   * 
+   * @throws IOException
+   *           if an I/O error occurs
+   * @throws InterruptedException
+   *           if the current thread is {@linkplain Thread#interrupt() interrupted} by another thread while it is
+   *           waiting
+   */
+  public final int exec(final OutputStream dumpOutputStream, final boolean closeDumpOutputStream, final String... arguments) throws IOException, InterruptedException {
 
     //
     // complete the command

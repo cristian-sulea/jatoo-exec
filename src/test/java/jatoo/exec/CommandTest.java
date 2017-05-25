@@ -27,7 +27,7 @@ import org.junit.Test;
  * JUnit tests for {@link Command}.
  * 
  * @author <a href="http://cristian.sulea.net" rel="author">Cristian Sulea</a>
- * @version 1.0, May 23, 2017
+ * @version 1.1, May 25, 2017
  */
 public class CommandTest {
 
@@ -51,11 +51,10 @@ public class CommandTest {
     }
 
     Command command = new Command("dir");
-    command.setDumpOutputStream(System.out);
     command.setFolder(new File("src"));
 
-    Assert.assertEquals(0, command.exec("/S", "/Q"));
-    Assert.assertEquals(1, command.exec("/\""));
+    Assert.assertEquals(0, command.exec(System.out, "/S", "/Q"));
+    Assert.assertEquals(1, command.exec(System.out, "/\""));
   }
 
   @Test
@@ -66,10 +65,9 @@ public class CommandTest {
     }
 
     Command command = new Command("dir");
-    command.setDumpOutputStream(System.out);
 
     Assert.assertFalse(new File("target\\CommandTest.txt").exists());
-    command.exec("/s", "src > target\\CommandTest.txt");
+    command.exec(System.out, "/s", "src > target\\CommandTest.txt");
     Assert.assertTrue(new File("target\\CommandTest.txt").exists());
   }
 
@@ -81,10 +79,9 @@ public class CommandTest {
     }
 
     Command command = new Command("copy");
-    command.setDumpOutputStream(System.out);
 
     Assert.assertFalse(new File("target\\CommandTest.java").exists());
-    command.exec("src\\test\\java\\jatoo\\exec\\CommandTest.java", "target");
+    command.exec(System.out, "src\\test\\java\\jatoo\\exec\\CommandTest.java", "target");
     Assert.assertTrue(new File("target\\CommandTest.java").exists());
   }
 
