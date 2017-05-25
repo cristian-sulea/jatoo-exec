@@ -119,7 +119,7 @@ public class Command {
    *           if the current thread is {@linkplain Thread#interrupt() interrupted} by another thread while it is
    *           waiting
    */
-  public final int exec(final String... arguments) throws IOException, InterruptedException {
+  public int exec(final String... arguments) throws IOException, InterruptedException {
     return exec(null, arguments);
   }
 
@@ -139,7 +139,7 @@ public class Command {
    *           if the current thread is {@linkplain Thread#interrupt() interrupted} by another thread while it is
    *           waiting
    */
-  public final int exec(final OutputStream dumpOutputStream, final String... arguments) throws IOException, InterruptedException {
+  public int exec(final OutputStream dumpOutputStream, final String... arguments) throws IOException, InterruptedException {
     return exec(dumpOutputStream, false, arguments);
   }
 
@@ -162,7 +162,7 @@ public class Command {
    *           if the current thread is {@linkplain Thread#interrupt() interrupted} by another thread while it is
    *           waiting
    */
-  public final int exec(final OutputStream dumpOutputStream, final boolean closeDumpOutputStream, final String... arguments) throws IOException, InterruptedException {
+  public int exec(final OutputStream dumpOutputStream, final boolean closeDumpOutputStream, final String... arguments) throws IOException, InterruptedException {
 
     //
     // complete the command
