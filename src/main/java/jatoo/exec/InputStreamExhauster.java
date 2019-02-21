@@ -60,7 +60,7 @@ public class InputStreamExhauster implements Runnable {
 
     try {
       // CHECKSTYLE:OFF
-      while (processInputStream.read(buffer) >= 0) {}
+      while (processInputStream.read(buffer) >= 0) {} // NOPMD
       // CHECKSTYLE:ON
     }
 
