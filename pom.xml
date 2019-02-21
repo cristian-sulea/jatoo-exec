@@ -5,12 +5,13 @@
   <parent>
     <groupId>net.sulea.cristian</groupId>
     <artifactId>jatoo</artifactId>
-    <relativePath>../jatoo/pom.xml</relativePath>
-    <version>5.0</version>
+    <version>5</version>
   </parent>
 
   <artifactId>jatoo-exec</artifactId>
   <packaging>jar</packaging>
+
+  <version>5.0</version>
 
 
   <name>JaToo Exec</name>
@@ -37,9 +38,9 @@
 
 
   <scm>
-    <connection>scm:git:git@github.com:cristian-sulea/jatoo-image.git</connection>
-    <developerConnection>scm:git:git@github.com:cristian-sulea/jatoo-image.git</developerConnection>
-    <url>https://github.com/cristian-sulea/jatoo-image</url>
+    <connection>scm:git:git@github.com:cristian-sulea/jatoo-exec.git</connection>
+    <developerConnection>scm:git:git@github.com:cristian-sulea/jatoo-exec.git</developerConnection>
+    <url>https://github.com/cristian-sulea/jatoo-exec</url>
   </scm>
 
 
