@@ -5,6 +5,7 @@
   <parent>
     <groupId>net.sulea.cristian</groupId>
     <artifactId>jatoo</artifactId>
+<!--     <relativePath>../jatoo/pom.xml</relativePath> -->
     <version>5</version>
   </parent>
 
